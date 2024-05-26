@@ -29,14 +29,12 @@ jobs:
             - name: sfdx-setup
               run: |
                 npm install -g @salesforce/cli
-                sf org login sfdx-url -f 
 
             - name: "Populate auth file with SFDX_URL secret"
-                shell: bash
-                run: "echo ${{ secrets.SFDX_URL_PRD }} > ./SFDX_URL_STORE.txt"
+              run: "echo ${{ secrets.SFDX_URL_PRD }} > ./SFDX_URL_STORE.txt"
 
             - name: "Authenticate with dev hub"
-                run: sf org login sfdx-url -f ./SFDX_URL_STORE.txt -a devhub -d
+              run: sf org login sfdx-url -f ./SFDX_URL_STORE.txt -a devhub -d
 
             - name: sfdx-deploy
               shell: bash

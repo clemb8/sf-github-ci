@@ -5,6 +5,8 @@ if [ $total -ge 85 ]; then
     echo ":clap: Code coverage is $total% :clap:"
 elif [ $total -ge 70 ]; then
     echo ":warning: Code coverage is $total% :warning:"
+elif [ $total -le 69 ]; then
+    echo ":scream: Code coverage is $total% :scream:"
 else
-    echo ":sob: Code coverage is $total% :sob:"
+    echo "No code coverage found"
 fi

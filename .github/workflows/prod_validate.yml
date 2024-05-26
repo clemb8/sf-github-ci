@@ -47,7 +47,7 @@ jobs:
               run: |
                   coverage=$(sh ./scripts/apex-coverage.sh)
                   echo 'var<<EOF' >> $GITHUB_OUTPUT
-                  echo "$coverage" >> "$GITHUB_OUTPUT"
+                  echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
                   echo 'EOF' >> $GITHUB_OUTPUT
                   echo ${{ steps.apex-coverage.outputs }}
             - name: github-comment

@@ -45,7 +45,7 @@ jobs:
             - name: apex-coverage
               id: apex-coverage
               run: |
-                  coverage=$((sh ./scripts/apex-coverage.sh))
+                  coverage=$(sh ./scripts/apex-coverage.sh)
                   echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
             - name: github-comment
               uses: actions/github-script@v6

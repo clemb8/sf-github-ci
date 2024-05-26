@@ -1,4 +1,4 @@
-total=$(jq .total.lines.pct ./coverage/coverage/coverage-summary.json)
+total=$(jq .total.lines.pct coverage/coverage/coverage-summary.json)
 #display percentage
 if [ $total -ge 85 ]; then
     echo ":clap: Code coverage is $total% :clap:"

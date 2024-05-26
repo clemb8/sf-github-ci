@@ -49,6 +49,7 @@ jobs:
                   echo 'var<<EOF' >> $GITHUB_OUTPUT
                   echo "$coverage" >> "$GITHUB_OUTPUT"
                   echo 'EOF' >> $GITHUB_OUTPUT
+                  echo ${{ steps.apex-coverage.outputs.coverage }}
             - name: github-comment
               uses: actions/github-script@v6
               with:

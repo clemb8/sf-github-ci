@@ -1,0 +1,60 @@
+name: Validate deployment on production
+
+# Controls when the action will run.
+on:
+    # Triggers the workflow on push or pull request events but only for the main branch
+    pull_request:
+        types:
+            - opened
+            - synchronize
+        branches:
+            - main
+        paths:
+            - 'force-app/**'
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+    group: '${{ github.head_ref }}'
+    cancel-in-progress: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+    validate_deploy_production:
+        runs-on: ubuntu-latest
+        outputs:
+            coverage: ${{ steps.apex-coverage.outputs.coverage }}
+
+        steps:
+            - name: git-checkout
+              uses: 'actions/checkout@main'
+
+            - name: sfdx-setup
+              uses: sfdx-actions/setup-sfdx@v1
+              with:
+                  sfdx-auth-url: ${{secrets.SFDX_URL_PRD}}
+
+            - name: sfdx-deploy
+              shell: bash
+              env:
+                  SFDX_DISABLE_DNS_CHECK: true
+              run: |
+                  sf project deploy validate --source-dir force-app/main/default -l RunLocalTests --coverage-formatters json-summary -w 90
+            - name: apex-coverage
+              id: apex-coverage
+              run: |
+                  coverage=$((sh ./scripts/apex-coverage.sh))
+                  echo "coverage=$coverage" >> "$GITHUB_OUTPUT"
+            - name: github-comment
+              uses: actions/github-script@v6
+              with:
+                script: |
+                    github.issues.createComment({
+                        issue_number: context.issue.number,
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        body: ${{ steps.apex-coverage.outputs.coverage }}
+                    })
+              

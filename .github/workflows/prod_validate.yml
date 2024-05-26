@@ -46,7 +46,9 @@ jobs:
               id: apex-coverage
               run: |
                   coverage=$(sh ./scripts/apex-coverage.sh)
+                  echo 'var<<EOF' >> $GITHUB_OUTPUT
                   echo "$coverage" >> "$GITHUB_OUTPUT"
+                  echo 'EOF' >> $GITHUB_OUTPUT
             - name: github-comment
               uses: actions/github-script@v6
               with:
